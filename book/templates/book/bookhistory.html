@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% block title  %}
+ Book Borrow history
+{% endblock  %}
+{% block content %}
+  <div class="container container my-auto bg-white rounded text-center">
+    <h4 class="mt-4 d-inline mx-5">Borrow History</h4>
+    <h5 class="mt-4 d-inline"><a class="text-decoration-none text-black" href="{% url 'bookborrowlist' %}">Book Borrowed List</a></h5>
+     
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th scope="col">Transaction Id</th>
+                <th scope="col">Username FistName</th>
+                <th scope="col">Username LastName</th>
+                <th scope="col">Book Name</th>
+                <th scope="col">Book Prices</th>
+                <th scope="col">Transaction Type</th>
+                <th scope="col">Date</th>
+                <th scope="col">Return Date</th>
+                <th scope="col">Returned</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{book.id }}</td>
+                    <td>{{transaction.user.first_name }}</td>
+                    <td>{{transaction.user.last_name}}</td>
+                    <td>{{book.BookName }}</td>
+                    <td>{{book.BookPrice }} <span style="font-size:25px; font-weight:bold;">৳</span></td>
+                    <td>{{transaction.transaction_type }}</td>
+                    <td>{{transaction.transaction_date }}</td>
+                    <td>{% if transaction.return_date %}{{ transaction.return_date }}{% else %}N/A{% endif %}</td>
+                    <td>{% if transaction.is_returned %}Yes{% else %}No{% endif %}</td>
+                    {% if transaction.transaction_type == "borrow" %}
+                    <td><form action="{% url 'bookborrowreturn' id=book.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Return</button>
+                    </form></td>
+                    {%endif%}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No history available for this book.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+{% block title  %}
+ Book Borrow Return history
+{% endblock  %}
+{% block content %}
+  <div class="container my-5 bg-white rounded">
+    <table class="table table-bordered mt-3 text-center">
+        <h4 class="mt-4">Borrow History</h4>
+      
+        <thead>
+            <tr>
+                <th scope="col">Transaction Id</th>
+                <th scope="col">Username FistName</th>
+                <th scope="col">Username LastName</th>
+                <th scope="col">Book Name</th>
+                <th scope="col">Book BookPrice</th>
+                <th scope="col">Transaction Type</th>
+                <th scope="col">Book Status</th>
+                <th scope="col">Date</th>
+                <th scope="col">Return Date</th>
+                <th scope="col">Returned</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in borrowed_return_books %}
+                <tr>
+                    <td>{{transaction.book.id}}</td>
+                    <td>{{transaction.user.first_name }}</td>
+                    <td>{{transaction.user.last_name}}</td>
+                    <td>{{transaction.book.BookName}}</td>
+                    <td>{{transaction.book.BookPrice}} <span style="font-size:25px; font-weight:bold;">৳</span></td>
+                    <td>{{ transaction.transaction_type }}</td>
+                    <td>{{ transaction.book.Status }}</td>
+                    <td>{{ transaction.transaction_date }}</td>
+                    <td>{% if transaction.return_date %}{{ transaction.return_date }}{% else %}N/A{% endif %}</td>
+                    <td>{% if transaction.is_returned %}Yes{% else %}No{% endif %}</td>
+        
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No history available for this book.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+
+{% endblock %}

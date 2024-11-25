@@ -1,0 +1,10 @@
+{% if messages%}
+
+{% for ms in messages%}
+
+<p class="alert alert-success" role="alert">
+    {{ms}}
+</p>
+{% endfor %}
+
+{% endif%}

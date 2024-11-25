@@ -1,0 +1,54 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+Book Detail Page
+{% endblock %}
+
+{% block content %}
+<div class="container container my-5 bg-white rounded">
+    <div class="row d-flex justify-content-center align-items-center">
+
+        <div class="col-md-6">
+            <img src="{{ book.image.url }}" alt="{{ book.BookName }}" style="height: 400px; object-fit: cover; width: 100%; margin:10px 1px;">
+        </div>
+    
+   
+        <div class="col-md-6">
+            <h5 class="card-title">{{ book.bookTitle }}</h5>
+            <p class="card-text"><strong>Book Name:</strong> {{ book.BookName }}</p>
+            <p class="card-text"><strong>Price:</strong> {{ book.BookPrice }} <span style="font-size:25px; font-weight:bold;">৳</span></p>
+            <p class="card-text"><strong>Category:</strong> {{ book.Category.categoryName }}</p>
+            <p class="card-text"><strong>Book Status:</strong> {{ book.Status }}</p>
+            <p class="card-text"><strong>Description:</strong> {{ book.BookDescription }}</p>
+            {% if book.Status == 'available' %}
+                <form method="POST" action="{% url 'bookborrow' id=book.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Borrow Now</button>
+                </form>
+            {% elif book.Status == 'borrowed' %}
+                <button class="btn btn-secondary" disabled>Already Borrowed</button>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card m-2">
+        <h5 class="p-3">Total comments: {{comments|length}}</h5>
+        {%for comment in comments %}
+        <div class="card-body border m-2">
+           <p>{{comment.name}} {{comment.create_at}}</p>
+           <p>{{comment.comment_text}}</p>
+          </div>
+          {%endfor %}
+        </div>
+      <div class="card m-2">
+        <div class="card-body">
+          <form method = "POST">
+            {% load crispy_forms_tags %}
+            <h1>Add Comment</h1>
+            {% csrf_token %}
+            {{ comment_form | crispy}}
+            <button type="submit" class="btn btn-warning">Submit</button>
+          </form>
+        </div>
+      </div>
+</div>
+{% endblock %}
